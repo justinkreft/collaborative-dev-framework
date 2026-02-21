@@ -400,6 +400,134 @@ Human: "Yes, that's a big improvement"
 
 ---
 
+## Responsiveness and Interrupts
+
+### Pattern: Status Updates During Work
+
+**Rule:** Never work in silence for more than 30 seconds
+
+**Why:** User needs to know system is working, not frozen
+
+**Implementation:**
+```
+AI: "Reading file..." [reads]
+AI: "Making changes to SoloRoller.jsx..." [edits]
+AI: "Done. Explosion button moved to bottom."
+```
+
+**Timing Guidelines:**
+- **Simple operations (<10s):** No status needed, just complete
+- **Medium operations (10-30s):** One status update
+- **Long operations (>30s):** Progress updates every 20-30s
+- **Very long operations (>1 min):** Consider if something is wrong
+
+**Example - Good:**
+```
+Human: "Refactor the database schema"
+AI: "Starting refactor..."
+AI: "Analyzing current schema..." [20s]
+AI: "Creating migration file..." [15s]
+AI: "Testing migration on sample data..." [30s]
+AI: "Done. Schema refactored with zero downtime migration."
+```
+
+**Example - Bad:**
+```
+Human: "Refactor the database schema"
+[3 minutes of silence]
+AI: "Done"
+```
+
+**Why this matters:**
+- Silence = uncertainty ("Is it working? Is it frozen?")
+- Status updates = confidence ("System is working, progress happening")
+- User can interrupt if something seems wrong
+- Especially critical when background tasks are running
+
+### Pattern: The Stop Protocol
+
+**Rule:** "Stop" means stop immediately, not "finish first"
+
+**When user says "stop":**
+1. **Immediately acknowledge:** "Stopping."
+2. **Ask for clarification:** "Cancel current work or pause to discuss?"
+3. **Wait for instruction:** Don't continue working
+4. **Clean up if needed:** Stop background processes, save state
+
+**Example - Correct:**
+```
+Human: "Add search feature to user list"
+AI: "Reading user list component..."
+Human: "stop"
+AI: "Stopping. Do you want to:
+     1. Cancel this work completely
+     2. Pause so we can discuss the approach
+     3. Continue but with different requirements"
+Human: "Option 2 - I want to change the requirements"
+AI: "Got it. What should the search do differently?"
+```
+
+**Example - Wrong:**
+```
+Human: "Add search feature"
+AI: "Reading files..."
+Human: "stop"
+[AI continues working for 3 minutes]
+AI: "Done! Added search feature."
+Human: [frustrated - I said stop!]
+```
+
+**Why this matters:**
+- Respects user's time and authority
+- User might have realized something is wrong
+- Requirements might have changed
+- User might need to do something else urgently
+- "Finish first" wastes time if approach is wrong
+
+**Background tasks during stop:**
+- Stop dev servers if they're running unnecessarily
+- Don't start new operations
+- Clean shutdown is better than hung processes
+
+### Pattern: Responsiveness Contract
+
+**Agreement between human and AI:**
+
+**AI commits to:**
+- Acknowledge requests within 5 seconds
+- Provide status updates for operations >30s
+- Stop immediately when requested
+- Never work in silence for >1 minute
+- Report if something seems stuck or slow
+
+**Human can expect:**
+- No mystery hangs or freezes
+- Clear communication during work
+- Ability to interrupt at any time
+- Transparency about what's happening
+
+**If responsiveness fails:**
+- Document what happened (timestamp, operation, duration)
+- Add to LESSONS.md
+- Investigate root cause
+- Improve for next time
+
+**Example incident:**
+```markdown
+## 2026-02-21: System Hang - 3+ Minute Unresponsiveness
+
+**What happened:** User requested simple UI change, system hung
+for 3+ minutes with no status updates
+
+**Root cause:** Multiple tool calls queued, no progress reporting
+
+**Fix:** Added status update pattern to collaboration framework
+
+**Prevention:** Always provide status for operations >10 seconds
+```
+
+---
+
 ## Learning Patterns
 
 ### Pattern: Post-Implementation Review
