@@ -71,6 +71,42 @@
 - Set explicit scope boundaries
 ```
 
+**Real Example from Practice:**
+```markdown
+## AAR: Web UI CLI Parity Implementation (2026-02-21)
+
+**Supposed to happen:**
+- Read formatters.py reference implementation
+- List all CLI output fields
+- Implement everything in one pass
+- Show user for verification
+
+**Actually happened:**
+- Built incrementally without reading reference first
+- User had to request missing pieces 3-4 times
+- Each iteration added more fields
+- Took ~4 iterations instead of 1
+
+**Why the difference:**
+- Didn't read reference implementation before coding
+- Assumed "match CLI" meant "similar" not "exact"
+- Underestimated importance of every detail
+- Missed that format strings, labels, emojis all matter
+
+**Next time:**
+- ALWAYS read reference implementation first
+- When user says "match exactly," read source code line-by-line
+- Create completeness checklist before implementing
+- Ask "What am I missing?" before showing user
+- Assume every detail is intentional
+
+**Impact:**
+- Feature works correctly ✓
+- User had to repeat themselves (frustrating)
+- Could have saved ~90 minutes with upfront analysis
+- Learned valuable pattern for future replication work
+```
+
 ### 5 Whys Analysis
 
 **When to use:** After bugs, failures, or unexpected problems

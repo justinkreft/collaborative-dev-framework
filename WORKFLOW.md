@@ -418,6 +418,109 @@ git commit -m "Add patterns from [project-name]"
 
 ---
 
+## Special Workflows
+
+### Replication Workflow: Matching Existing Output
+
+**When to use:** Implementing a feature that must match existing CLI, API, or UI output exactly.
+
+**Pre-Implementation Checklist:**
+
+```markdown
+## Before You Code: Replication Prep
+
+- [ ] Locate reference implementation (source code, not just output)
+- [ ] Read reference code line-by-line
+- [ ] List all outputs, fields, labels, format strings
+- [ ] Note all conditionals (when does output vary?)
+- [ ] Check for edge cases in reference
+- [ ] Map reference fields to new implementation
+- [ ] Ask user: "Should I list what I found for verification?"
+```
+
+**Implementation Flow:**
+
+```
+1. ANALYZE REFERENCE
+   └─ Read source code (formatters, views, templates)
+   └─ Document all fields, variations, formats
+   └─ Note every label, emoji, delimiter
+   └─ Check for conditional logic
+
+2. CREATE COMPLETENESS MAP
+   └─ List every field in reference
+   └─ Note exact formatting (e.g., "#01" vs "#1")
+   └─ Document all status message variations
+   └─ Map to target implementation structure
+
+3. VERIFY BEFORE CODING
+   └─ Show completeness map to user
+   └─ Ask: "Am I missing anything from reference?"
+   └─ Clarify any ambiguities
+
+4. IMPLEMENT EXHAUSTIVELY
+   └─ Build all fields in one pass
+   └─ Match formatting exactly
+   └─ Include all variations/conditionals
+
+5. CROSS-REFERENCE
+   └─ Compare output to reference line-by-line
+   └─ Test all conditional branches
+   └─ Verify edge cases match
+
+6. SHOW USER
+   └─ Demo matching output
+   └─ Highlight completeness
+   └─ Request final verification
+```
+
+**What "Match Exactly" Means:**
+
+- ✅ Every field in original
+- ✅ Exact label wording ("Overfill (wasted pips)" not "Overfill")
+- ✅ Format strings ("#01" not "#1" if reference uses zero-padding)
+- ✅ Delimiters ([5, 3, 2] vs 5 + 3 + 2)
+- ✅ Status message variations (all branches)
+- ✅ Emojis and symbols (💥 vs ⦿)
+- ✅ Field order and grouping
+- ✅ Conditional display logic (show X only when Y)
+- ✅ Color coding, styling (if applicable)
+
+**Anti-Pattern: Incremental Guessing**
+
+❌ Don't do this:
+```
+Build basic version → User: "Missing X" → Add X
+→ User: "Missing Y" → Add Y
+→ User: "Don't make me ask again" → Finally read reference
+```
+
+✅ Do this instead:
+```
+Read reference → List all fields → Verify completeness
+→ Build everything in one pass → Show complete result
+```
+
+**Why This Matters:**
+
+When user says "match exactly," they usually designed the original carefully:
+- Every field has a purpose
+- Every format choice is intentional
+- Missing pieces feel like their work wasn't respected
+
+**Better to over-deliver than under-deliver on completeness.**
+
+**Real Example:**
+
+- **Task:** Make web UI match CLI output
+- **Wrong approach:** Built incrementally, user requested missing pieces 4 times
+- **Right approach:** Read `formatters.py`, list 15+ fields, implement all at once
+- **Time saved:** ~90 minutes if done correctly from start
+
+**File Reference:** `META_LEARNING_FRAMEWORK.md` lines 736-813 for detailed lessons
+
+---
+
 ## Key Principles
 
 1. **Copy framework → Use it → Learn from it → Improve it → Share back**
@@ -425,6 +528,7 @@ git commit -m "Add patterns from [project-name]"
 3. **Validate patterns 2+ times before adding to framework**
 4. **Drop what doesn't help, keep what does**
 5. **Framework serves you, not the other way around**
+6. **When replicating: Read reference first, code second**
 
 ---
 
