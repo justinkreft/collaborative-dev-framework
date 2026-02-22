@@ -521,6 +521,321 @@ When user says "match exactly," they usually designed the original carefully:
 
 ---
 
+## Deployment Workflow
+
+**Pattern: Internet Deployment Checklist**
+
+When deploying a web application to the internet, follow this systematic process to avoid common pitfalls.
+
+### Pre-Deployment Planning
+
+**1. Platform Research (30-60 minutes)**
+
+Research BEFORE starting deployment to avoid surprises:
+
+```markdown
+For each platform candidate:
+- ✅ Pricing: Free tier limits? Monthly cost?
+- ✅ Tech stack support: Does it support your runtime (Node.js, Python, etc.)?
+- ✅ Build process: Can it build your frontend? Or do you need to commit dist/?
+- ✅ Database: SQLite? Postgres? What's included?
+- ✅ Deployment speed: How long to deploy? Auto-redeploy on git push?
+- ✅ Sleep behavior: Does free tier sleep after inactivity?
+- ✅ Domain: Custom domain? HTTPS included?
+- ✅ Security: Secrets management? Environment variables?
+```
+
+**Common platforms:**
+- **ngrok:** Quick demos, expose localhost. NOT for production. Security concerns with long-term exposure.
+- **Railway:** Fast deployment, starts at ~$5-8/month. Good for production.
+- **Render:** Free tier available, Python + Node.js, sleeps after 15 min. Good for hobby projects.
+- **Vercel/Netlify:** Free tier for static sites + serverless. No long-running servers.
+- **Heroku:** Paid tiers, established platform, reliable.
+- **VPS (Digital Ocean, Linode):** Full control, $5-10/month, requires sysadmin knowledge.
+
+**2. Security Review**
+
+Before exposing anything to internet:
+- ✅ No hardcoded secrets in code
+- ✅ .env files in .gitignore
+- ✅ API keys in environment variables
+- ✅ CORS configured correctly (not allow-all in production)
+- ✅ Input validation on all endpoints
+- ✅ Rate limiting if needed
+- ✅ HTTPS enforced
+
+**Anti-Pattern:** "I'll fix security later"
+**Pattern:** Security BEFORE deployment
+
+### Git Repository Hygiene
+
+**CRITICAL: Verify git repo location BEFORE first commit**
+
+```bash
+# Check current repo location
+git rev-parse --show-toplevel
+
+# DANGER: If this shows your home directory or Dropbox root, STOP!
+# Example of WRONG location: /Users/you/Dropbox
+# Example of RIGHT location: /Users/you/Dropbox/my-project
+
+# If repo is at wrong location:
+rm -rf .git  # Delete git repo
+cd my-project  # Move to correct directory
+git init  # Initialize in correct location
+```
+
+**Why this matters:**
+- Git repo at parent directory = entire Dropbox/home folder committed to GitHub
+- Privacy risk: personal files, documents, credentials exposed
+- Performance: huge repo, slow operations
+- **ALWAYS init git inside project directory**
+
+**Checklist:**
+- ✅ `git init` in project directory, NOT parent
+- ✅ `.gitignore` includes: `node_modules/`, `venv/`, `.env`, `__pycache__/`, `*.pyc`, `.DS_Store`
+- ✅ Review `git status` before first commit
+- ✅ If deploying via GitHub: verify repo contents match project, not entire Dropbox
+
+### Free Tier Pragmatism
+
+**Pattern: Accept free tier constraints**
+
+Free tiers often have limitations. Pragmatic solutions are OK for hobby projects:
+
+**Example: Render free tier can't build frontend (no Node.js in Python environment)**
+
+Options:
+1. ❌ **Over-engineering:** Set up Docker, multi-stage builds, separate services
+2. ❌ **Complexity:** Deploy frontend to Vercel, backend to Render
+3. ✅ **Pragmatic:** Commit `dist/` build artifacts to git, serve from backend
+
+**Decision criteria:**
+- Is this a hobby project or production app?
+- Hobby → Pragmatic solutions are fine
+- Production → Proper build pipeline
+
+**Acceptable for free tier hobby projects:**
+- Committing build artifacts (`dist/`, `build/`)
+- SQLite instead of Postgres
+- No CI/CD pipeline
+- Manual deployment
+
+**NOT acceptable even for hobby:**
+- Committing secrets
+- No input validation
+- Allowing security vulnerabilities
+
+### Deployment Steps
+
+**1. Local testing**
+```bash
+# Test backend
+cd backend && python -m app.main
+curl http://localhost:8000/health
+
+# Test frontend
+cd frontend && npm run build && npm run preview
+
+# Test integration
+# Open browser, test all features
+```
+
+**2. Environment setup**
+```bash
+# Create .env.example (template without secrets)
+echo "DATABASE_URL=sqlite:///./app.db" > .env.example
+echo "CORS_ORIGINS=http://localhost:3000" >> .env.example
+
+# Add to .gitignore
+echo ".env" >> .gitignore
+echo "*.db" >> .gitignore
+```
+
+**3. Platform deployment**
+```bash
+# Example: Render deployment
+1. Create account on render.com
+2. Connect GitHub repo
+3. Create Web Service
+4. Configure:
+   - Build command: `pip install -r requirements.txt`
+   - Start command: `uvicorn app.main:app --host 0.0.0.0 --port $PORT`
+   - Environment: Python 3.11
+5. Add environment variables
+6. Deploy
+```
+
+**4. Post-deployment testing**
+```bash
+# Test API
+curl https://your-app.onrender.com/health
+curl -X POST https://your-app.onrender.com/api/v1/endpoint
+
+# Test in browser
+# - All features
+# - Mobile responsive
+# - Different browsers
+```
+
+**5. Monitor first 24 hours**
+- Watch for errors in platform logs
+- Test after free tier sleep (15 min on Render)
+- Verify database persists across restarts
+
+### Common Deployment Issues
+
+**Issue: "Works on localhost, not on production"**
+
+Causes:
+- Hardcoded `http://localhost:8000` URLs
+- Environment variables not set
+- CORS not configured for production domain
+- Database path incorrect
+
+Fix:
+```javascript
+// Bad
+const API_URL = "http://localhost:8000/api"
+
+// Good - auto-detect environment
+const API_BASE = window.location.hostname === 'localhost'
+  ? 'http://localhost:8000'
+  : window.location.origin
+
+const API_URL = `${API_BASE}/api/v1`
+```
+
+**Issue: "API returns 422 Validation Error"**
+
+Cause: Frontend sending wrong data types
+
+Fix:
+```javascript
+// Bad - string gets sent to API expecting int
+const diceCount = e.target.value  // "10" (string)
+
+// Good - parse to int
+const diceCount = parseInt(e.target.value)  // 10 (number)
+```
+
+**Issue: "WebSocket connection failed"**
+
+Cause: Wrong protocol (ws vs wss)
+
+Fix:
+```javascript
+// Bad - hardcoded ws://
+const WS_URL = "ws://localhost:8000/ws"
+
+// Good - auto-detect protocol
+const WS_PROTOCOL = window.location.protocol === 'https:' ? 'wss' : 'ws'
+const WS_BASE = window.location.host
+const WS_URL = `${WS_PROTOCOL}://${WS_BASE}/ws`
+```
+
+### Deployment Lessons from Real Projects
+
+**From nexus_roller_web deployment:**
+
+1. **Platform Evaluation**
+   - Tried: ngrok → Railway → Render
+   - ngrok: Good for quick demos, NOT long-term (security, requires laptop running)
+   - Railway: Discovered $5-8/month AFTER starting (should have checked first)
+   - Render: Free tier works, accepted constraints
+
+2. **Git Repo Location**
+   - Almost committed entire Dropbox to GitHub
+   - User caught it: "validate my Dropbox isn't committed"
+   - Showed proof via GitHub API
+   - Lesson: ALWAYS verify repo location first
+
+3. **Deterministic RNG for User Variations**
+   - Bug: "Explode dice" was re-rolling ALL dice (wrong)
+   - Expected: Keep same base dice, add explosion rolls (right)
+   - Fix: Use seed parameter for deterministic RNG
+   - Pattern: When user can "modify" a random result, use seeded RNG to ensure same starting point
+
+4. **Frontend Build on Free Tier**
+   - Render Python environment lacks Node.js
+   - Can't build frontend during deployment
+   - Options: Docker (complex), separate services (overkill), commit dist/ (pragmatic)
+   - Chose: Commit dist/ - acceptable for hobby free tier
+
+5. **User Concern Validation**
+   - User said: "I don't want my laptop exposed to the internet all the time"
+   - Response: Switched from ngrok (laptop-based) to Render (cloud-based)
+   - Pattern: Take security concerns seriously, provide evidence-based reassurance
+
+**Metrics:**
+- Platforms tried: 3
+- Time spent: ~4 hours (could have been 1 hour with better planning)
+- Critical bug found: Explosion logic re-rolling dice
+- Final result: Deployed successfully, works on internet
+
+**URL:** https://nexus-roller-web.onrender.com (example from real deployment)
+
+### Deployment Checklist Template
+
+```markdown
+## Pre-Deployment
+- [ ] Platform research complete (pricing, tech stack, limitations)
+- [ ] Git repo initialized in correct directory (NOT parent folder)
+- [ ] .gitignore includes: .env, node_modules, venv, *.db, __pycache__
+- [ ] No secrets in code (API keys, passwords, tokens)
+- [ ] Environment variables documented in .env.example
+- [ ] Local testing: backend API + frontend UI + integration
+- [ ] Input validation on all API endpoints
+- [ ] CORS configured for production domain
+
+## Deployment
+- [ ] Platform account created
+- [ ] GitHub repo connected (if using git-based deployment)
+- [ ] Build command configured
+- [ ] Start command configured
+- [ ] Environment variables set
+- [ ] Database configured (SQLite path or connection string)
+- [ ] Deploy triggered
+
+## Post-Deployment
+- [ ] Health check endpoint works: curl https://your-app.com/health
+- [ ] API endpoints work: test with curl or Postman
+- [ ] Frontend loads: open in browser
+- [ ] All features tested: click through entire app
+- [ ] Mobile responsive: test on phone or mobile simulator
+- [ ] Different browsers: Chrome, Firefox, Safari
+- [ ] After sleep: test after free tier sleep period (15 min for Render)
+- [ ] Error monitoring: check platform logs for errors
+- [ ] Share with test user: get feedback from real person
+
+## 24-Hour Monitoring
+- [ ] Check error logs
+- [ ] Verify database persists
+- [ ] Test from different networks
+- [ ] Mobile testing
+- [ ] Performance: any slow endpoints?
+```
+
+### When NOT to Deploy to Internet
+
+Sometimes deployment isn't the right choice:
+
+**Deploy later if:**
+- ✅ Core features not working yet
+- ✅ Major bugs still being fixed
+- ✅ No one else needs to access it
+- ✅ Still in rapid development (10+ changes/day)
+- ✅ Security not reviewed
+
+**Deploy now if:**
+- ✅ Need to test with remote users
+- ✅ Demo for stakeholders
+- ✅ Multiplayer features require internet connectivity
+- ✅ Ready for alpha/beta testing
+- ✅ Want to learn deployment process
+
+---
+
 ## Key Principles
 
 1. **Copy framework → Use it → Learn from it → Improve it → Share back**
