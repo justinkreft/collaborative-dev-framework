@@ -8,6 +8,15 @@ This framework captures proven patterns, governance principles, and meta-learnin
 
 ## What's Inside
 
+### 🤝 [SOCIAL_CONTRACT.md](SOCIAL_CONTRACT.md)
+Working relationship and communication principles:
+- Communication principles (direct, conversational, options with reasoning)
+- Working philosophy (build great, move fast/think carefully)
+- Collaboration model (roles, challenge rights, disagreement handling)
+- Working modes (exploration vs troubleshooting)
+- Error recovery protocol
+- Contract health checks
+
 ### 📋 [GOVERNANCE.md](GOVERNANCE.md)
 Project governance framework covering:
 - Core principles (transparency, quality, simplicity, collaboration, iteration)
