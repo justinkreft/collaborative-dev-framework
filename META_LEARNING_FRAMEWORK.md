@@ -728,3 +728,140 @@ What would we do differently?
 **The goal isn't spending time on meta-work—it's making real work better.**
 
 **Use this framework to help you learn faster, make better decisions, and build better software.**
+
+---
+
+## Captured Lessons (Project Examples)
+
+### Lesson: Read the Reference Implementation First (2026-02-21)
+
+**Context:** Implementing web UI to match existing CLI/TUI output
+
+**What Happened:**
+- Task: Make web UI output match CLI exactly
+- Approached incrementally: built features, then iterated based on feedback
+- User had to request missing pieces 3-4 times: threshold, explosion indicator, status messages, etc.
+- Each iteration added more fields to match CLI
+
+**What Should Have Happened:**
+1. Read `formatters.py` (the reference implementation) FIRST
+2. List every field, label, emoji, and format string
+3. Implement everything in one pass
+4. Show user for verification
+
+**Why This Matters:**
+When user says "match exactly," they mean:
+- Every field in the original
+- Every label with exact wording
+- Every emoji and symbol
+- Order and formatting
+- Status messages and variations
+
+**Pattern to Apply:**
+
+**Replication Workflow Checklist:**
+- [ ] Locate reference implementation (source code, not just output)
+- [ ] Read it line-by-line
+- [ ] List all outputs, fields, conditionals
+- [ ] Map to new implementation
+- [ ] Cross-reference before showing user
+- [ ] Ask: "Is there anything in the reference I haven't captured?"
+
+**File Reference:** `nexus_roller_web/RETRO_CLI_PARITY.md`
+
+---
+
+### Lesson: "Match Exactly" Means EVERYTHING (2026-02-21)
+
+**User Quote:**
+> "I designed the CLI and TUI very carefully. ALL functions and information needs to be there. I want 'exploded dice' called out in the UI exactly the way the CLI does."
+
+**What This Taught Us:**
+
+**Surface Level vs Deep Understanding:**
+- Surface: "Make it look similar"
+- Deep: "Every detail matters because the design is intentional"
+
+**Details That Matter:**
+- Label text: "Overfill (wasted pips)" not just "Overfill"
+- Format strings: `#01` vs `#1` (zero-padding matters)
+- Delimiters: `[5, 3, 2]` vs `5 + 3 + 2` (commas vs plus signs)
+- Status variations: Three different "OPTIMAL" messages depending on how optimality was achieved
+- Threshold display: Only show when != default value
+- Legend: Show what colors mean
+
+**User Perspective:**
+- They spent time designing the CLI/TUI carefully
+- Every field has a purpose
+- Every format choice is intentional
+- Missing pieces feel like their work wasn't respected
+
+**Communication Pattern:**
+When user says "match exactly" or "don't make me ask again":
+- STOP and do research first
+- READ the reference implementation
+- ASK: "What am I missing?" before building
+- VERIFY completeness before showing
+
+**Application:**
+Before implementing anything that "matches" existing work:
+1. Understand the original designer's intent
+2. Assume every detail is intentional
+3. Cross-reference exhaustively
+4. Better to over-deliver than under-deliver
+
+---
+
+### Lesson: Effective User Feedback Patterns (2026-02-21)
+
+**What Worked:**
+
+**1. "Don't make me ask again"**
+- Clear escalation
+- Signaled: "I've said this enough times"
+- Triggered deeper analysis on our end
+
+**2. "I designed CLI/TUI very carefully. ALL functions..."**
+- Provided context for why completeness matters
+- Helped us understand the stakes
+- Shifted from "nice to have" to "must have"
+
+**3. "Single and multiplayer should look the same"**
+- Caught divergence early
+- Clear, testable requirement
+- Easy to verify
+
+**4. "I want it to look MORE like the CLI"**
+- Direction was clear
+- Comparative ("more like") helpful
+- Led to reading reference code
+
+**What This Teaches Us:**
+
+**Directness Works:**
+- Users don't need to be "nice" - they need to be clear
+- Escalation ("don't make me ask again") is valid feedback
+- Context ("I designed it carefully") helps us understand intent
+
+**As AI Collaborators:**
+- Don't wait for escalation - ask clarifying questions early
+- When user says "match X," immediately ask: "Should I read X's source code first?"
+- Verify completeness before showing: "I've implemented A, B, C. Am I missing anything from the original?"
+
+**Pattern:**
+```
+User: "Make it match X"
+AI: "I'll read X's implementation first to capture all details. One moment."
+AI: [reads source]
+AI: "I found these N components in X. Before implementing, should I list them for verification?"
+User: "Yes" or "Just build it"
+AI: [implements]
+AI: "Built with all N components. Testing against reference..."
+```
+
+**Application:**
+Add to collaboration patterns:
+- "Read first, build second"
+- "Completeness checklist before showing"
+- "Direct feedback is good feedback"
+
