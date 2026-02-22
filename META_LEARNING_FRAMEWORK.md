@@ -865,3 +865,229 @@ Add to collaboration patterns:
 - "Completeness checklist before showing"
 - "Direct feedback is good feedback"
 
+
+---
+
+## Framework Update Pattern
+
+### Pattern: Extract Lessons to Framework
+
+**When:** After completing a project session that revealed project-agnostic patterns
+
+**Flow:**
+
+```
+1. Work on project
+   ↓
+2. Capture project-specific lessons (LESSONS.md)
+   ↓
+3. Conduct retro (identify patterns)
+   ↓
+4. Extract generic patterns
+   ↓
+5. Update framework documents
+   ↓
+6. Commit to framework repo
+```
+
+### Decision: Which Framework Doc to Update?
+
+**SOCIAL_CONTRACT.md:**
+- Communication principles
+- Working relationship rules
+- Error handling protocols
+- Example: "Don't make me ask again" as effective escalation
+
+**GOVERNANCE.md:**
+- Decision-making processes
+- Quality standards
+- Commit message formats
+- Example: Multi-paragraph commit message standards
+
+**COLLABORATION_PATTERNS.md:**
+- Tactical work patterns
+- Session management
+- Problem-solving approaches
+- Example: Stop protocol, status updates, context preservation
+
+**META_LEARNING_FRAMEWORK.md:**
+- How to learn from work
+- Reflection frameworks
+- Lesson capture patterns
+- Example: "Read reference implementation first"
+
+**WORKFLOW.md:**
+- How framework itself evolves
+- Cross-project patterns
+- Framework maintenance
+- Example: This pattern itself!
+
+### Example: 2026-02-21 Session
+
+**What happened:**
+- Worked on nexus_roller_web
+- Made web UI match CLI exactly
+- Had to iterate 3-4 times
+- User said "don't make me ask again"
+- Realized: should have read formatters.py first
+
+**Project-specific lesson (nexus_roller_web/LESSONS.md):**
+```markdown
+## Lesson: Read Reference Implementation First
+
+Should have read formatters.py before implementing web UI.
+Would have captured all fields in first pass.
+```
+
+**Extract generic pattern:**
+- This applies to ANY project where you're matching existing output
+- Not specific to dice rollers or nexus_roller
+- Reusable pattern for all future work
+
+**Add to framework (META_LEARNING_FRAMEWORK.md):**
+```markdown
+### Lesson: Read the Reference Implementation First
+
+**Context:** Implementing feature to match existing implementation
+
+**Pattern:**
+1. Locate reference implementation source code
+2. Read it line-by-line
+3. List all outputs, fields, conditionals
+4. Map to new implementation
+5. Cross-reference before building
+
+**Replication Workflow Checklist:**
+- [ ] Locate reference implementation
+- [ ] Read it completely
+- [ ] List all components
+- [ ] Ask user: "Am I missing anything?"
+```
+
+**Commit to framework:**
+```bash
+cd collaborative-dev-framework
+git add META_LEARNING_FRAMEWORK.md
+git commit -m "Add 'read reference first' pattern from nexus_roller session"
+```
+
+### Extraction Process
+
+**Step 1: Identify the lesson**
+- What went wrong or right?
+- What would we do differently?
+- Is this project-specific or generic?
+
+**Step 2: Generalize it**
+- Remove project-specific details
+- Identify the core pattern
+- Make it applicable to any project
+
+**Step 3: Find the right home**
+- Communication → SOCIAL_CONTRACT
+- Quality/process → GOVERNANCE
+- Tactical patterns → COLLABORATION_PATTERNS
+- Learning/reflection → META_LEARNING
+- Framework itself → WORKFLOW
+
+**Step 4: Write it up**
+- Clear title
+- Context when to use
+- Pattern/template
+- Real example (can be project-specific for illustration)
+- Anti-pattern (what NOT to do)
+
+**Step 5: Commit**
+- Descriptive commit message
+- Reference source project if helpful
+- Link to retro doc if it exists
+
+### Multiple Lessons from One Session
+
+**Example: 2026-02-21 Session Extracted:**
+
+1. **META_LEARNING_FRAMEWORK.md**
+   - "Read the Reference Implementation First"
+   - "Match Exactly Means EVERYTHING"
+   - "Effective User Feedback Patterns"
+
+2. **COLLABORATION_PATTERNS.md**
+   - Context preservation (pickup documents)
+   - Session end protocol
+   - User support patterns (self-doubt)
+
+3. **GOVERNANCE.md**
+   - Commit message standards
+   - Co-authorship pattern
+
+**All from one 24-hour work session.**
+
+### When to Update Framework
+
+**After every project?** No. Too much overhead.
+
+**Update when:**
+- Pattern used successfully 2-3 times (proven)
+- Lesson was significant (changed how we work)
+- Pattern feels generalizable (not project-specific)
+- Natural opportunity (session end, retro, cleanup)
+
+**Don't update when:**
+- One-time situation
+- Project-specific quirk
+- Obvious/common knowledge
+- No clear pattern emerged
+
+### Framework Health
+
+**Signs framework is healthy:**
+- Gets referenced during work
+- Patterns are actually used
+- Grows slowly but steadily
+- Remains readable and navigable
+
+**Signs framework is unhealthy:**
+- Never referenced
+- Just a dumping ground
+- Growing too fast (no curation)
+- Too complex to navigate
+
+**Maintenance:**
+- Periodically review what's not being used
+- Consolidate duplicate patterns
+- Archive outdated patterns
+- Update INDEX.md when adding sections
+
+### Meta-Meta-Learning
+
+**This pattern is itself an example of meta-learning:**
+
+- Project work teaches lessons
+- Lessons teach patterns
+- Patterns improve framework
+- Framework improves future projects
+- **Loop continues forever**
+
+**The goal:** Each project makes the next one easier.
+
+### Real Example: This Document
+
+**Source:** 2026-02-21 nexus_roller_web session
+
+**Extracted lessons:**
+- Context preservation (COLLABORATION_PATTERNS)
+- Session end protocol (COLLABORATION_PATTERNS)
+- Commit standards (GOVERNANCE)
+- User support patterns (COLLABORATION_PATTERNS)
+- Framework update flow (META_LEARNING) ← This section!
+
+**Process:**
+1. Worked on nexus_roller_web (project)
+2. Created RETRO_CLI_PARITY.md (project retro)
+3. Identified generic patterns (extraction)
+4. Updated framework docs (application)
+5. Committed to framework repo (preservation)
+6. Documented the extraction process itself (meta-meta-learning)
+
+**Result:** Framework is now more complete. Next project will benefit from all these patterns.
+

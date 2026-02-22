@@ -263,6 +263,206 @@ Code is done when:
 
 ---
 
+
+---
+
+## Commit Message Standards
+
+### Format
+
+**Single-line commits (simple changes):**
+```
+Fix typo in README
+
+Co-Authored-By: Claude Sonnet 4.5 <noreply@anthropic.com>
+```
+
+**Multi-paragraph commits (complex changes):**
+```
+Short summary of change (50 chars or less)
+
+Detailed explanation of what changed and why:
+- Bullet point 1
+- Bullet point 2
+- Bullet point 3
+
+Additional context:
+- Why this approach was chosen
+- What alternatives were considered
+- What impact this has
+
+Specific changes to files:
+- file1.py: What changed
+- file2.jsx: What changed
+
+Co-Authored-By: Claude Sonnet 4.5 <noreply@anthropic.com>
+```
+
+### Components
+
+**1. Summary Line (Required)**
+- 50 characters or less
+- Imperative mood ("Add feature" not "Added feature")
+- Capitalize first word
+- No period at end
+
+**2. Body (For non-trivial changes)**
+- Separate from summary with blank line
+- Explain WHAT and WHY, not HOW (code shows how)
+- Use bullet points for lists
+- Wrap at 72 characters
+
+**3. Details (For complex changes)**
+- Explain reasoning
+- Note alternatives considered
+- List file-by-file changes if many files
+- Link to issues, docs, or decisions
+
+**4. Co-Authorship (For AI collaboration)**
+```
+Co-Authored-By: Claude Sonnet 4.5 <noreply@anthropic.com>
+```
+
+### Examples from Real Projects
+
+**Example 1: Feature Addition**
+```
+Match web UI output to CLI/TUI exactly
+
+Backend changes:
+- Add pre_explosion field to RollResult (solo and multiplayer)
+- Add threshold field to all results
+- Add all CLI metrics: total_sum, max_success_bound, overfill, verified_optimal, remainder_count
+- Calculate pre-explosion stats and store in response when exploding
+- Fix WebSocket accept() placement (moved to endpoint, removed from ConnectionManager)
+
+Frontend changes:
+- Rewrite RollResult.jsx to match CLI output exactly
+- Rewrite SoloRoller.jsx to match CLI output exactly
+- Add explosion indicator (💥 EXPLOSIONS: ON / ⦿ EXPLOSIONS: OFF)
+- Add solver mode messages matching CLI
+- Add dice legend (original, 10, exploded)
+- Add totals section with threshold and all CLI fields
+- Add explosion rolls section (post-explosion only)
+- Add remainder dice count display
+- Format success groups as #01, #02 with commas and (sum=X)
+- Show detailed status messages (optimal variants)
+- Add PRE-EXPLOSION / POST-EXPLOSION comparison view
+- Add CSS for all new sections
+
+Result: Solo and multiplayer modes now identical, matching CLI/TUI completely.
+
+Co-Authored-By: Claude Sonnet 4.5 <noreply@anthropic.com>
+```
+
+**Example 2: Documentation**
+```
+Add session documentation and ignore database files
+
+- DEPLOYMENT_PLAN.md: Railway deployment guide
+- QUICK_MULTIPLAYER_TEST.md: 10-minute localhost test procedure
+- RETRO_CLI_PARITY.md: Retrospective on CLI matching work
+- .gitignore: Add *.db to ignore SQLite databases
+
+Co-Authored-By: Claude Sonnet 4.5 <noreply@anthropic.com>
+```
+
+**Example 3: Framework Update**
+```
+Add lessons from nexus_roller web UI CLI parity session
+
+New lessons added:
+1. Read the Reference Implementation First
+   - Replication workflow checklist
+   - Pattern: Read source code before building
+   - Example: Should have read formatters.py first
+
+2. "Match Exactly" Means EVERYTHING
+   - Surface vs deep understanding
+   - Details that matter (labels, formatting, order)
+   - User perspective on intentional design
+
+3. Effective User Feedback Patterns
+   - What worked: Direct communication
+   - Escalation patterns
+   - "Read first, build second" pattern
+
+Context: 2026-02-21 session implementing web UI to match CLI/TUI
+Source: nexus_roller_web/RETRO_CLI_PARITY.md
+
+Co-Authored-By: Claude Sonnet 4.5 <noreply@anthropic.com>
+```
+
+### When to Use Which Format
+
+**Single-line (no body):**
+- Typo fixes
+- Simple formatting changes
+- Small refactors
+- Documentation tweaks
+- One-file, obvious changes
+
+**Multi-paragraph (with body):**
+- Feature additions
+- Bug fixes that need explanation
+- Architecture changes
+- Multiple files changed
+- Non-obvious decisions
+- Anything future-you will wonder about
+
+**Detailed (with context):**
+- Major features
+- Breaking changes
+- Performance improvements
+- Security fixes
+- Framework updates
+- Anything that needs "why" explained
+
+### Anti-Patterns
+
+❌ **Vague messages:**
+```
+Fix bug
+Update code
+WIP
+```
+
+❌ **Too technical (only "how"):**
+```
+Change variable x to y and refactor function z
+```
+
+❌ **Missing context:**
+```
+Add feature
+```
+(What feature? Why? What does it do?)
+
+❌ **Missing co-authorship:**
+(When AI did significant work, credit it)
+
+### Guidelines
+
+**Think about future readers:**
+- 6 months from now, will you remember what this was about?
+- Can someone understand the change without reading the code?
+- Is it clear why this approach was chosen?
+
+**Be specific:**
+- "Fix login bug" → "Fix 401 error when user password contains special characters"
+- "Update README" → "Add installation instructions for M1 Macs"
+- "Refactor code" → "Extract validation logic from 200-line function for testability"
+
+**Explain reasoning:**
+- Not just what changed
+- Why it changed
+- What alternatives were considered
+- What impact it has
+
+
+
+---
+
 ## Quality Gates
 
 ### Before Committing

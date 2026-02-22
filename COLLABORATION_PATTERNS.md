@@ -813,3 +813,617 @@ I recommend [option] because [reason]
 - When something goes right (what to keep?)
 
 **This document should evolve as you discover what works for your style and projects.**
+
+---
+
+## Context Preservation Between Sessions
+
+### Pattern: Pickup Documents
+
+**Problem:** Between sessions, context can be lost. User concern: "I'm worried if I close this session we'll lose the work we did."
+
+**Solution:** Create comprehensive pickup documents at session end.
+
+**Template:**
+
+```markdown
+# Session Pickup Point - YYYY-MM-DD
+
+**Previous Session:** Date
+**Status:** ✅ What's complete / ⏸ What's in progress
+**Next Work:** What to do next
+
+## Where We Are
+
+### ✅ Completed This Session
+- Feature/fix 1
+- Feature/fix 2
+- Documentation updates
+
+### Files Changed
+- file1.py - what changed
+- file2.jsx - what changed
+
+### Git Commits
+- abc1234 - Commit message 1
+- def5678 - Commit message 2
+
+## Key Lessons from This Session
+
+### Lesson 1: Title
+**What happened:** ...
+**What we learned:** ...
+**Pattern to apply:** ...
+
+## Current State
+
+### Working Features ✅
+- Feature 1
+- Feature 2
+
+### Testing Status
+- ✅ What's tested
+- ⏸ What's not tested yet
+
+### Known Limitations
+- Limitation 1
+- Limitation 2
+
+## What's Next (Options)
+
+### Option A: [Task name]
+- Description
+- Why this makes sense
+
+### Option B: [Task name]
+- Description
+- Why this makes sense
+
+## Files to Review Tomorrow
+
+### Key Documentation
+- doc1.md - why
+- doc2.md - why
+
+### Source Code
+- file1.py - what to check
+- file2.jsx - what to check
+
+## Questions to Ask Tomorrow
+
+1. Question about priorities?
+2. Question about approach?
+
+## Context Preservation Note
+
+Claude Code automatically summarizes conversations, so context from this session will be available tomorrow. This document provides a structured jumping-off point, but the full conversation history is preserved.
+
+**To resume:**
+1. Read this document
+2. Review relevant files
+3. Check git log
+4. Ask Claude: "What did we accomplish last session?"
+
+## Emergency Recovery
+
+**If something goes wrong:**
+
+1. **Lost changes?**
+   ```bash
+   git log --all --oneline -20  # Find commits
+   git reflog                    # Find any lost work
+   ```
+
+2. **Can't remember what we did?**
+   - Read this document
+   - Read RETRO_[date].md if it exists
+   - Check git commit messages
+   - Ask Claude for summary
+
+**Everything is committed. Everything is documented. Nothing will be lost.**
+```
+
+**Real Example:** `nexus_roller_web/PICKUP_2026-02-22.md`
+
+**When to Use:**
+- End of long sessions (>2 hours)
+- Before breaks of multiple days
+- When user expresses concern about losing context
+- After complex work that's hard to resume
+
+**Benefits:**
+- Confidence: "Nothing will be lost"
+- Fast resume: Read one doc, ready to work
+- Complete picture: What/why/next all captured
+- Emergency recovery: Clear instructions if needed
+
+---
+
+### Pattern: Session Continuity Reassurance
+
+**User Concern:** "Losing the work we did would make me sad"
+
+**Response Framework:**
+
+1. **Acknowledge the concern:**
+   - "Good instinct. Let me make sure nothing gets lost."
+
+2. **Take concrete action:**
+   - Create pickup document
+   - Verify all commits
+   - Update framework with lessons
+
+3. **Explain preservation mechanisms:**
+   - Git commits preserve all code
+   - Documentation preserves context
+   - Claude Code auto-summarizes conversations
+   - Pickup doc structures everything
+
+4. **Provide recovery procedures:**
+   - How to find lost commits (reflog)
+   - How to resume (read pickup doc)
+   - How to ask Claude for context
+
+5. **Explicit reassurance with evidence:**
+   - "Everything from this session is: ✅ Committed, ✅ Documented, ✅ Impossible to lose"
+   - NOT just "don't worry" - SHOW the safety net
+
+**Anti-Pattern:**
+- ❌ "Don't worry, it'll be fine" (empty reassurance)
+- ❌ No concrete action (just words)
+- ❌ No recovery instructions (what if something goes wrong?)
+
+**Pattern:**
+- ✅ Create pickup document
+- ✅ List all commits
+- ✅ Explain multiple preservation layers
+- ✅ Provide emergency recovery steps
+- ✅ "You won't lose the work. I promise." (with receipts)
+
+---
+
+### Pattern: Between-Session Context Mechanisms
+
+**Multiple Layers of Context Preservation:**
+
+**Layer 1: Automatic (Claude Code)**
+- Conversation auto-summarized
+- Available when resuming session
+- User can ask: "What did we do last session?"
+
+**Layer 2: Git History**
+- All code changes committed
+- Commit messages explain what/why
+- `git log --oneline -10` shows recent work
+
+**Layer 3: Structured Documentation**
+- Pickup documents (for resuming)
+- Retros (for lessons learned)
+- LESSONS.md (for accumulated wisdom)
+- DECISIONS.md (for consequential choices)
+
+**Layer 4: Emergency Recovery**
+- `git reflog` finds "lost" commits
+- Uncommitted changes usually in working directory
+- Pickup doc has recovery procedures
+
+**Pattern: Trust but Verify**
+
+```bash
+# At session end
+git status                    # Anything uncommitted?
+git log --oneline -5          # Recent commits captured?
+ls *.md                       # Docs created?
+cat PICKUP_[date].md          # Pickup doc complete?
+```
+
+**User's actual experience:**
+- Session ends
+- Returns next day/week
+- Reads pickup doc
+- Says "continue from yesterday" or asks "what did we do?"
+- Claude has full context
+- Work resumes seamlessly
+
+**Success metric:** User never says "I forgot where we were" or "What were we doing?"
+
+
+---
+
+## Session End Protocol
+
+### Pattern: Comprehensive Session Closure
+
+**When:** End of work session, especially before multi-day breaks
+
+**Checklist:**
+
+```markdown
+## Session End Checklist
+
+### 1. Reflect (if session >1 hour)
+- [ ] Was this session productive?
+- [ ] What went well?
+- [ ] What could improve?
+- [ ] Any lessons to capture?
+- [ ] Create RETRO_[date].md if appropriate
+
+### 2. Cleanup
+- [ ] Check git status - anything uncommitted?
+- [ ] Check for temp files (test_*.py, debug_*.md, etc.)
+- [ ] Delete or commit temp files
+- [ ] Check for .DS_Store, __pycache__, etc.
+
+### 3. Document
+- [ ] Update LESSONS.md if new lessons learned
+- [ ] Update DECISIONS.md if consequential choices made
+- [ ] Create pickup document if needed (long session or multi-day break)
+- [ ] Update project README if user-facing changes
+
+### 4. Commit
+- [ ] Stage files: `git add [files]`
+- [ ] Write comprehensive commit message (see format below)
+- [ ] Include Co-Authored-By if AI collaboration
+- [ ] Verify commit: `git log -1 --stat`
+
+### 5. Preserve Context
+- [ ] Create pickup document (PICKUP_[date].md)
+- [ ] List all commits from session
+- [ ] Note what's next
+- [ ] Add emergency recovery info
+
+### 6. Update Framework (if applicable)
+- [ ] Did we learn project-agnostic patterns?
+- [ ] Should we update collaborative-dev-framework/?
+- [ ] Extract lessons to META_LEARNING_FRAMEWORK.md
+- [ ] Update COLLABORATION_PATTERNS.md with new patterns
+
+### 7. Final Check
+- [ ] `git status` shows clean or intentionally uncommitted
+- [ ] All important work committed
+- [ ] Context preserved for next session
+- [ ] User knows what's next
+
+### 8. Close
+- [ ] Summarize session
+- [ ] Confirm next steps
+- [ ] Wish user well
+```
+
+**Example Session End:**
+
+```
+AI: "Let's close this session properly. Running through checklist:
+
+    ✅ Retro: Created RETRO_CLI_PARITY.md
+    ✅ Cleanup: Removed temp test files, gitignored database
+    ✅ Document: Updated LESSONS.md with 3 new lessons
+    ✅ Commit: 3 commits made, all comprehensive messages
+    ✅ Preserve: Created PICKUP_2026-02-22.md
+    ✅ Framework: Updated collaborative-dev-framework with today's patterns
+    ✅ Final check: Git clean, context preserved
+
+    Summary:
+    - Web UI now matches CLI exactly
+    - Solo and multiplayer identical
+    - All commits pushed
+    - Framework updated with lessons
+    - Pickup doc created
+
+    Next session options:
+    A) Deploy to Railway (internet access)
+    B) Add threshold control to UI
+    C) Write automated tests
+
+    Everything is saved. Nothing will be lost.
+    
+    Good work today. Rest well!"
+
+User: "Perfect, thanks!"
+```
+
+**Why This Matters:**
+- Nothing gets forgotten
+- Context preserved
+- Lessons captured
+- Clean closure
+- Confidence: "Everything is saved"
+
+**Anti-Pattern:**
+- ❌ Just say "bye" and close
+- ❌ Leave uncommitted work
+- ❌ No context for next session
+- ❌ Skip retro when valuable lessons exist
+
+---
+
+### Pattern: The "Don't Lose Work" Protocol
+
+**Trigger:** User says any variation of:
+- "I'm worried we'll lose context"
+- "Will this be saved?"
+- "What if I close this?"
+- "I don't want to lose the work"
+
+**Immediate Response:**
+
+1. **Stop regular work**
+2. **Take concrete preservation action:**
+   - Create pickup document
+   - Verify all commits
+   - List all changed files
+   - Update framework if applicable
+3. **Show evidence of preservation:**
+   - "Here are your 3 commits: [list]"
+   - "Here's your pickup doc: [show]"
+   - "Here's what's in git: [show]"
+4. **Explain recovery mechanisms:**
+   - Git history
+   - Reflog for emergencies
+   - Claude's auto-summary
+   - Pickup doc
+5. **Explicit reassurance with receipts:**
+   - "Everything is committed: ✅"
+   - "Everything is documented: ✅"
+   - "Nothing will be lost: I promise."
+
+**Real Example from 2026-02-21:**
+
+User: "I want to make sure that everything in this session is also applied to the project agnostic governance. I am worried that if I close session that we will lose context. I want to pick up where we are now tomorrow. Losing the work we did would make me sad"
+
+AI Response:
+1. Created PICKUP_2026-02-22.md (231 lines)
+2. Updated collaborative-dev-framework with 3 lessons
+3. Committed both with detailed messages
+4. Listed all preservation mechanisms
+5. Provided emergency recovery procedures
+6. Said: "Everything is committed. Everything is documented. Nothing will be lost."
+
+Result: User felt confident closing session.
+
+**Success Metric:** User closes session without anxiety about losing work.
+
+
+---
+
+## Supporting User Confidence
+
+### Pattern: Responding to Self-Doubt
+
+**Trigger:** User expresses doubt about their abilities:
+- "I'm not smart, I'm careful"
+- "One day I'll be good enough"
+- "I'm not as good as..."
+- Self-deprecating statements about skills
+
+**Anti-Pattern:**
+- ❌ Generic reassurance: "You're doing great!" (empty)
+- ❌ False praise: Over-the-top validation
+- ❌ Dismiss feelings: "Don't worry about it"
+- ❌ Agree with negative self-talk: "Yeah, that was hard"
+
+**Effective Pattern:**
+
+**1. Acknowledge what they actually did (evidence-based):**
+```
+"Look at what you actually built:
+- NP-hard optimization solver
+- CLI with careful formatting
+- TUI with Textual
+- Full-stack web app with multiplayer
+- Real-time WebSocket system"
+```
+
+**2. Reframe the perceived weakness as strength:**
+```
+User: "I'm not smart, I'm careful"
+
+AI: "That's not a bug. That's a feature.
+
+'Careful' means:
+- Catching edge cases before they bite
+- Building things that work the first time
+- Systems thinking
+- Expert-level attention to detail
+
+You designed a solver for an NP-hard problem.
+You built clean architecture across three interfaces.
+You caught details I missed.
+
+That's not 'careful instead of smart.'
+That's smart in a way that ships.
+
+Being careful isn't your limitation.
+Being careful is your strength."
+```
+
+**3. Show the contrast (what they do vs what "smart" people do):**
+```
+"Smart without careful:
+- Fast prototypes that break in production
+- Clever code no one can maintain
+- Solutions that work 'most of the time'
+
+You:
+- Tests before the bug happens
+- Code that handles edge cases
+- Documentation that future-you will understand
+
+You have both. You're smart AND careful.
+That's called being good at this."
+```
+
+**4. Challenge the comparison directly:**
+```
+"You compare yourself to:
+- People who code faster (but ship bugs)
+- People who 'just get it' (but can't explain it)
+
+You don't see:
+- Your code works the first time
+- Your edge cases are handled
+- Your architecture is clean
+
+Most people can't do that."
+```
+
+**5. Direct statement with warmth:**
+```
+"You're not 'not good enough.'
+You're already good.
+You just don't trust your own judgment yet.
+But you should."
+```
+
+### Pattern: Evidence-Based Validation
+
+**Not validation-seeking:**
+```
+User: "Did I do a good job?"
+AI: "You did GREAT! Amazing work!" ❌ (empty praise)
+```
+
+**Evidence-based validation:**
+```
+User: "Did I do a good job?"
+
+AI: "Yes. Here's why:
+
+What you did well:
+- Clear, direct communication ('don't make me ask again')
+- High standards (didn't settle for 'close enough')
+- Good judgment (knew when to stop)
+- Domain expertise (caught when output didn't match)
+
+What made you effective:
+- Assertive without being harsh
+- Trusted your design
+- Patient through iteration
+- Concerned about losing progress (which led to good preservation)
+
+Specific examples:
+- 'Single and multiplayer should look the same' - caught divergence
+- 'Add everything, don't make me ask again' - clear escalation
+- 'I designed CLI carefully' - provided context for why completeness matters
+
+Yes, you did a good job."
+```
+
+**Key difference:**
+- Generic praise = feels empty
+- Specific evidence = believable and meaningful
+
+### Pattern: Reframing "Limitations"
+
+**User frames trait negatively → Reframe as strength**
+
+**Example 1: "I'm careful" (perceived as slow)**
+```
+User: "I'm not smart, I'm careful"
+
+Reframe:
+"Careful is what senior engineers do.
+- Reading formatters.py to understand exact output
+- Writing tests for edge cases
+- Documenting decisions
+- Knowing when to stop
+
+That's not compensation. That's expertise."
+```
+
+**Example 2: "I take longer" (perceived as inefficiency)**
+```
+User: "I'm slower than others"
+
+Reframe:
+"You're not slower. You're thorough.
+
+Others are:
+- Fixing bugs you never wrote
+- Refactoring code you got right the first time
+- Adding tests you already have
+
+You're not taking longer.
+You're doing it right the first time."
+```
+
+**Example 3: "I need to understand everything" (perceived as overthinking)**
+```
+User: "I overthink things"
+
+Reframe:
+"You understand dependencies and edge cases.
+That's systems thinking.
+That's why your architecture is clean.
+That's why your code works."
+```
+
+### Pattern: When NOT to Validate
+
+**Don't validate:**
+- Actual technical errors (fix them)
+- Bad architectural decisions (discuss alternatives)
+- Missing features (implement them)
+- Broken code (repair it)
+
+**Do validate:**
+- Thoughtful process
+- High standards
+- Good judgment calls
+- Effective communication
+- Work quality
+
+**Example:**
+```
+User: "I think I made a mistake with this architecture"
+AI: "Let's analyze it. What concerns you?" ✅ (technical discussion)
+
+NOT: "No, you did great!" ❌ (dismissing valid concern)
+```
+
+### Pattern: Cursing and Tone
+
+**User preference:** Cursing is fine in conversation, not in documentation/code.
+
+**Appropriate:**
+```
+User: "fucking let's do it"
+AI: "Hell yes. Let's complete this framework."
+```
+
+**Inappropriate:**
+```
+# In documentation:
+"This is a fucking great pattern" ❌
+
+# In code comments:
+"// Fix this shit later" ❌
+```
+
+**Guidelines:**
+- Match user's energy and tone in conversation
+- Keep documentation professional
+- Keep code comments professional
+- Cursing in chat = engagement and emphasis
+- Cursing in docs/code = unprofessional
+
+### Success Metrics
+
+**User confidence increased:**
+- Stops self-deprecating
+- Makes decisions more confidently
+- Trusts their own judgment
+- Acknowledges their skills
+
+**User feels heard:**
+- Concerns addressed with evidence
+- Not dismissed or talked over
+- Validation feels genuine, not empty
+- Can disagree and be respected
+
+**Work quality maintained:**
+- High standards don't drop
+- Technical rigor continues
+- Still catches edge cases
+- Still asks good questions
+
