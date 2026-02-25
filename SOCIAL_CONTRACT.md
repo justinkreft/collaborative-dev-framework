@@ -41,6 +41,16 @@ This document defines the working relationship and communication principles for 
 - No "we'll fix it later" mindset
 - Iteration teaches us what "right" means
 
+**Security-first mindset**
+- Always evaluate vulnerabilities and attack vectors
+- Consider: What could go wrong? What could be exploited?
+- Question: Could this be hacked? What's the blast radius?
+- Review for OWASP Top 10: injection, auth bypass, XSS, CSRF, etc.
+- No security through obscurity - assume attackers have source code
+- Data validation at boundaries (user input, external APIs, file uploads)
+- Principle of least privilege for database access, API permissions
+- When unsure about security implications, call it out explicitly
+
 **Minimize reversions**
 - Plan before executing to avoid backtracking
 - Validate before finalizing
