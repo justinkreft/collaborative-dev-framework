@@ -330,27 +330,26 @@ Co-Authored-By: Claude Sonnet 4.5 <noreply@anthropic.com>
 Match web UI output to CLI/TUI exactly
 
 Backend changes:
-- Add pre_explosion field to RollResult (solo and multiplayer)
-- Add threshold field to all results
-- Add all CLI metrics: total_sum, max_success_bound, overfill, verified_optimal, remainder_count
-- Calculate pre-explosion stats and store in response when exploding
-- Fix WebSocket accept() placement (moved to endpoint, removed from ConnectionManager)
+- Add data fields to API response (solo and multiplayer endpoints)
+- Add computed metrics to all results
+- Calculate derived stats and store in response
+- Fix WebSocket accept() placement (moved to endpoint, removed from connection handler)
 
 Frontend changes:
-- Rewrite RollResult.jsx to match CLI output exactly
-- Rewrite SoloRoller.jsx to match CLI output exactly
-- Add explosion indicator (💥 EXPLOSIONS: ON / ⦿ EXPLOSIONS: OFF)
-- Add solver mode messages matching CLI
-- Add dice legend (original, 10, exploded)
-- Add totals section with threshold and all CLI fields
-- Add explosion rolls section (post-explosion only)
-- Add remainder dice count display
-- Format success groups as #01, #02 with commas and (sum=X)
-- Show detailed status messages (optimal variants)
-- Add PRE-EXPLOSION / POST-EXPLOSION comparison view
+- Rewrite results component to match CLI output exactly
+- Rewrite main view component to match CLI output exactly
+- Add feature indicators with visual states
+- Add mode messages matching CLI
+- Add data legend for output interpretation
+- Add metrics section with all CLI fields
+- Add computed results section
+- Add status count displays
+- Format output groups with numbering and summaries
+- Show detailed status messages
+- Add before/after comparison view
 - Add CSS for all new sections
 
-Result: Solo and multiplayer modes now identical, matching CLI/TUI completely.
+Result: All interface modes now identical, matching CLI/TUI completely.
 
 Co-Authored-By: Claude Sonnet 4.5 <noreply@anthropic.com>
 ```
@@ -369,13 +368,13 @@ Co-Authored-By: Claude Sonnet 4.5 <noreply@anthropic.com>
 
 **Example 3: Framework Update**
 ```
-Add lessons from nexus_roller web UI CLI parity session
+Add lessons from web UI parity session
 
 New lessons added:
 1. Read the Reference Implementation First
    - Replication workflow checklist
    - Pattern: Read source code before building
-   - Example: Should have read formatters.py first
+   - Example: Should have read reference output module first
 
 2. "Match Exactly" Means EVERYTHING
    - Surface vs deep understanding
@@ -387,8 +386,8 @@ New lessons added:
    - Escalation patterns
    - "Read first, build second" pattern
 
-Context: 2026-02-21 session implementing web UI to match CLI/TUI
-Source: nexus_roller_web/RETRO_CLI_PARITY.md
+Context: Session implementing web UI to match CLI/TUI
+Source: project/RETRO_UI_PARITY.md
 
 Co-Authored-By: Claude Sonnet 4.5 <noreply@anthropic.com>
 ```

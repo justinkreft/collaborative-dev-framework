@@ -67,13 +67,13 @@
 **Copy framework docs to project:**
 ```bash
 # Option A: Copy all framework docs to new project
-cp ~/Dropbox/collaborative-dev-framework/*.md ~/new-project/docs/
+cp ~/projects/collaborative-dev-framework/*.md ~/new-project/docs/
 
 # Option B: Symlink for live updates (advanced)
-ln -s ~/Dropbox/collaborative-dev-framework ~/new-project/docs/framework
+ln -s ~/projects/collaborative-dev-framework ~/new-project/docs/framework
 
 # Option C: Reference only (lightweight)
-echo "See: ~/Dropbox/collaborative-dev-framework" > ~/new-project/docs/GOVERNANCE_REF.md
+echo "See: ~/projects/collaborative-dev-framework" > ~/new-project/docs/GOVERNANCE_REF.md
 ```
 
 **Create project-specific files:**
@@ -148,7 +148,7 @@ Review project LESSONS.md and DECISIONS.md. For each lesson, ask:
 **Example transformation:**
 
 **Project-specific (LESSONS.md):**
-> "In nexus_roller TUI, explosion buttons were invisible in the scrollable control panel. Moving them to the result display (where user's eyes were) fixed discoverability."
+> "In Project A TUI, action buttons were invisible in the scrollable control panel. Moving them to the result display (where user's eyes were) fixed discoverability."
 
 **Generic pattern (for framework):**
 > "**Principle:** Place interactive UI elements near the information they act upon, not in separate scrollable panels. Users' visual focus follows content, not chrome."
@@ -161,7 +161,7 @@ Review project LESSONS.md and DECISIONS.md. For each lesson, ask:
 
 **Process:**
 ```bash
-cd ~/Dropbox/collaborative-dev-framework
+cd ~/projects/collaborative-dev-framework
 git pull  # Get latest changes
 
 # Review project lessons
@@ -176,7 +176,7 @@ vim META_LEARNING_FRAMEWORK.md # Add new reflection techniques
 git add -A
 git commit -m "Add UX principle: Place UI where users look
 
-Learned from nexus_roller TUI development:
+Learned from Project A TUI development:
 - Buttons in scrollable sidebar were invisible to users
 - Moving buttons near content they act on improved discoverability
 - General principle: UI follows user's visual focus
@@ -189,7 +189,7 @@ git push
 **Version the framework:**
 ```bash
 # Optional: Tag major updates
-git tag -a v1.1 -m "Added UX design principles from nexus_roller project"
+git tag -a v1.1 -m "Added UX design principles from Project A"
 git push --tags
 ```
 
@@ -320,14 +320,14 @@ git checkout my-workflow
 
 ---
 
-## Real-World Example: nexus_roller → nexus_roller_web
+## Real-World Example: Project A → Project B
 
-### What We Learned (nexus_roller project):
+### What We Learned (Project A):
 
 **From LESSONS.md:**
-- TUI buttons invisible in sidebar → Move UI near content
-- Rich markup syntax errors → Test markup strings in isolation
-- Threshold field confusing in TUI → Not every feature needs every interface
+- UI controls invisible in sidebar → Move UI near content
+- Markup syntax errors → Test markup strings in isolation
+- Optional features confusing in certain interfaces → Not every feature needs every interface
 - Test coverage gaps → Evaluate coverage, add critical tests
 - Magic numbers everywhere → Extract to constants
 
@@ -335,7 +335,7 @@ git checkout my-workflow
 
 **COLLABORATION_PATTERNS.md:**
 - Added: "Put UI where users look" principle
-- Added: "Simplify for the common case" (TUI vs CLI complexity)
+- Added: "Simplify for the common case" (interface complexity trade-offs)
 - Added: "Trust user feedback over test results"
 
 **META_LEARNING_FRAMEWORK.md:**
@@ -346,7 +346,7 @@ git checkout my-workflow
 - Reinforced: "Test coverage is a signal, not a goal"
 - Added: Pattern of targeted edge case testing (one well-chosen test > ten random)
 
-### What We Applied to Next Project (nexus_roller_web):
+### What We Applied to Next Project (Project B):
 
 **Started with:**
 - GOVERNANCE.md principles (transparency, quality, iteration)
@@ -359,8 +359,8 @@ git checkout my-workflow
 - Reference framework, don't copy all docs
 
 **Will feed back:**
-- WebSocket multiplayer patterns (if successful)
-- Room code generation approaches
+- Real-time collaboration patterns (if successful)
+- Session management approaches
 - Database migration patterns (SQLite → Postgres)
 
 ---
@@ -386,8 +386,8 @@ git checkout my-workflow
 
 ### Starting Project
 ```bash
-cp ~/Dropbox/collaborative-dev-framework/GOVERNANCE.md ~/new-project/docs/
-cp ~/Dropbox/collaborative-dev-framework/COLLABORATION_PATTERNS.md ~/new-project/docs/
+cp ~/projects/collaborative-dev-framework/GOVERNANCE.md ~/new-project/docs/
+cp ~/projects/collaborative-dev-framework/COLLABORATION_PATTERNS.md ~/new-project/docs/
 touch ~/new-project/DECISIONS.md
 touch ~/new-project/LESSONS.md
 ```
@@ -401,17 +401,17 @@ echo "## Decision: [Title]" >> DECISIONS.md
 echo "## [Date]: [What Happened]" >> LESSONS.md
 
 # Use framework patterns
-cat ~/Dropbox/collaborative-dev-framework/COLLABORATION_PATTERNS.md | grep "Pattern:"
+cat ~/projects/collaborative-dev-framework/COLLABORATION_PATTERNS.md | grep "Pattern:"
 ```
 
 ### After Project
 ```bash
 # Extract patterns
 vim LESSONS.md  # Review project lessons
-vim ~/Dropbox/collaborative-dev-framework/COLLABORATION_PATTERNS.md  # Add generic patterns
+vim ~/projects/collaborative-dev-framework/COLLABORATION_PATTERNS.md  # Add generic patterns
 
 # Commit improvements
-cd ~/Dropbox/collaborative-dev-framework
+cd ~/projects/collaborative-dev-framework
 git add -A
 git commit -m "Add patterns from [project-name]"
 ```
@@ -575,9 +575,9 @@ Before exposing anything to internet:
 # Check current repo location
 git rev-parse --show-toplevel
 
-# DANGER: If this shows your home directory or Dropbox root, STOP!
-# Example of WRONG location: /Users/you/Dropbox
-# Example of RIGHT location: /Users/you/Dropbox/my-project
+# DANGER: If this shows your home directory or Documents root, STOP!
+# Example of WRONG location: /Users/you or /Users/you/Documents
+# Example of RIGHT location: /Users/you/projects/my-project
 
 # If repo is at wrong location:
 rm -rf .git  # Delete git repo
@@ -586,7 +586,7 @@ git init  # Initialize in correct location
 ```
 
 **Why this matters:**
-- Git repo at parent directory = entire Dropbox/home folder committed to GitHub
+- Git repo at parent directory = entire home/documents folder committed to GitHub
 - Privacy risk: personal files, documents, credentials exposed
 - Performance: huge repo, slow operations
 - **ALWAYS init git inside project directory**
@@ -595,7 +595,7 @@ git init  # Initialize in correct location
 - ✅ `git init` in project directory, NOT parent
 - ✅ `.gitignore` includes: `node_modules/`, `venv/`, `.env`, `__pycache__/`, `*.pyc`, `.DS_Store`
 - ✅ Review `git status` before first commit
-- ✅ If deploying via GitHub: verify repo contents match project, not entire Dropbox
+- ✅ If deploying via GitHub: verify repo contents match project, not entire home directory
 
 ### Free Tier Pragmatism
 
@@ -713,10 +713,10 @@ Cause: Frontend sending wrong data types
 Fix:
 ```javascript
 // Bad - string gets sent to API expecting int
-const diceCount = e.target.value  // "10" (string)
+const itemCount = e.target.value  // "10" (string)
 
 // Good - parse to int
-const diceCount = parseInt(e.target.value)  // 10 (number)
+const itemCount = parseInt(e.target.value)  // 10 (number)
 ```
 
 **Issue: "WebSocket connection failed"**
@@ -736,7 +736,7 @@ const WS_URL = `${WS_PROTOCOL}://${WS_BASE}/ws`
 
 ### Deployment Lessons from Real Projects
 
-**From nexus_roller_web deployment:**
+**From Project B deployment:**
 
 1. **Platform Evaluation**
    - Tried: ngrok → Railway → Render
@@ -745,14 +745,14 @@ const WS_URL = `${WS_PROTOCOL}://${WS_BASE}/ws`
    - Render: Free tier works, accepted constraints
 
 2. **Git Repo Location**
-   - Almost committed entire Dropbox to GitHub
-   - User caught it: "validate my Dropbox isn't committed"
-   - Showed proof via GitHub API
+   - Risk: Almost committed entire home directory to GitHub
+   - Prevention: Verify repo location before first commit
+   - Check via GitHub API or `git status` to confirm scope
    - Lesson: ALWAYS verify repo location first
 
 3. **Deterministic RNG for User Variations**
-   - Bug: "Explode dice" was re-rolling ALL dice (wrong)
-   - Expected: Keep same base dice, add explosion rolls (right)
+   - Bug: "Modify results" was re-rolling ALL items (wrong)
+   - Expected: Keep same base results, add modifications (right)
    - Fix: Use seed parameter for deterministic RNG
    - Pattern: When user can "modify" a random result, use seeded RNG to ensure same starting point
 
@@ -770,10 +770,10 @@ const WS_URL = `${WS_PROTOCOL}://${WS_BASE}/ws`
 **Metrics:**
 - Platforms tried: 3
 - Time spent: ~4 hours (could have been 1 hour with better planning)
-- Critical bug found: Explosion logic re-rolling dice
+- Critical bug found: Modification logic re-rolling items
 - Final result: Deployed successfully, works on internet
 
-**URL:** https://nexus-roller-web.onrender.com (example from real deployment)
+**URL:** https://project-b.onrender.com (example deployment URL)
 
 ### Deployment Checklist Template
 

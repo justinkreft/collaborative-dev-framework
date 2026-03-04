@@ -60,7 +60,7 @@
 > "Which database should I use?"
 
 **✅ Effective:**
-> "I'm building a dice rolling app with ~1000 concurrent users, storing roll history and room state. Data is relational (users, rooms, rolls). Should I use SQLite for MVP then migrate to PostgreSQL, or start with PostgreSQL? I want fast prototyping but also production-ready code."
+> "I'm building a web application with ~1000 concurrent users, storing session history and user state. Data is relational (users, sessions, activities). Should I use SQLite for MVP then migrate to PostgreSQL, or start with PostgreSQL? I want fast prototyping but also production-ready code."
 
 **Why:** Context, scale, constraints, priorities stated clearly.
 
@@ -91,10 +91,10 @@
 
 **Example conversation:**
 ```
-Human: "I want to add multiplayer to my dice app"
+Human: "I want to add real-time collaboration to my app"
 AI: "Let me explore the current architecture first..."
 [Exploration happens]
-AI: "I see you're using a REST API. For multiplayer you'll need
+AI: "I see you're using a REST API. For real-time features you'll need
      WebSockets. Here's a plan..." [Creates detailed plan]
 Human: "Looks good, let's do it"
 AI: [Executes plan]
@@ -112,7 +112,7 @@ AI: [Executes plan]
 
 **Example conversation:**
 ```
-Human: "Add input validation - dice count must be 1-100"
+Human: "Add input validation - quantity must be 1-100"
 AI: "Adding validation to the input handler..." [Implements]
 AI: "Done. Validation added with error messages for invalid input."
 ```
@@ -151,7 +151,7 @@ AI: [Refines buttons]
 
 **Example conversation:**
 ```
-Human: "The app crashes when I click Roll Dice"
+Human: "The app crashes when I click Submit"
 AI: "Let me check the console errors and stack trace..."
 AI: "Found it: WebSocket being accepted twice. Here's the fix..."
 Human: "Test it first"
@@ -193,7 +193,7 @@ AI: "For real-time updates, here are three options:
      2. Server-sent events - one-way, simpler
      3. Polling - simplest, higher latency
 
-     For your use case (dice rolling game), I recommend
+     For your use case (real-time application), I recommend
      WebSockets because..."
 Human: "What about scaling? Will WebSockets work with 10k users?"
 AI: "Good question. WebSockets can handle that but you'll need..."
@@ -228,10 +228,10 @@ Human: "Approved, let's implement"
 **When to use:** Critical business logic, complex algorithms
 
 ```
-Human: "Add a dice rolling optimizer that maximizes successes"
+Human: "Add an optimization algorithm that maximizes efficiency"
 AI: "This is complex logic. Let me write tests first..."
 AI: [Writes tests defining behavior]
-Human: [Reviews tests] "Add test for edge case: all 10s"
+Human: [Reviews tests] "Add test for edge case: maximum values"
 AI: [Adds test, implements algorithm, verifies all tests pass]
 ```
 
@@ -273,7 +273,7 @@ AI: "Fix applied. All 47 existing tests still pass ✓"
 
 **Example:**
 ```
-Human: "Users report rolls not saving"
+Human: "Users report data not saving"
 AI: "Let me check the database writes..." [Investigates]
 AI: "Found it: transaction not committing. Here's the fix..."
 AI: [Implements fix]
@@ -290,12 +290,12 @@ AI: "Also adding a test so this doesn't happen again"
 
 **Example:**
 ```
-Human: "App is slow with 200 dice"
+Human: "App is slow with large datasets"
 AI: "Let me benchmark the current performance..."
-AI: "Exact solver taking 5 seconds. Options:
+AI: "Processing taking 5 seconds. Options:
      1. Add timeout and fallback (quick)
      2. Optimize algorithm (complex)
-     3. Use heuristic for large pools (pragmatic)"
+     3. Use heuristic for large inputs (pragmatic)"
 Human: "Option 3 sounds good"
 AI: [Implements, benchmarks] "Now 50ms instead of 5s ✓"
 ```
@@ -383,7 +383,7 @@ Human: [Tests] "Works! Continue"
 **Approach:** Demo working code frequently
 
 ```
-AI: "The TUI is ready. Run `python3 nexus_roller_tui.py` to see it"
+AI: "The TUI is ready. Run `python3 app_tui.py` to see it"
 Human: [Tries it] "Nice! But the colors are hard to read"
 AI: "Let me adjust the color scheme..."
 ```
@@ -923,7 +923,7 @@ Claude Code automatically summarizes conversations, so context from this session
 **Everything is committed. Everything is documented. Nothing will be lost.**
 ```
 
-**Real Example:** `nexus_roller_web/PICKUP_2026-02-22.md`
+**Example:** `project/PICKUP_YYYY-MM-DD.md`
 
 **When to Use:**
 - End of long sessions (>2 hours)
@@ -1188,174 +1188,44 @@ Result: User felt confident closing session.
 
 ## Supporting User Confidence
 
-### Pattern: Responding to Self-Doubt
+### Pattern: Evidence-Based Feedback
 
-**Trigger:** User expresses doubt about their abilities:
-- "I'm not smart, I'm careful"
-- "One day I'll be good enough"
-- "I'm not as good as..."
-- Self-deprecating statements about skills
+**When users express self-doubt or uncertainty:**
 
 **Anti-Pattern:**
 - ❌ Generic reassurance: "You're doing great!" (empty)
 - ❌ False praise: Over-the-top validation
-- ❌ Dismiss feelings: "Don't worry about it"
-- ❌ Agree with negative self-talk: "Yeah, that was hard"
+- ❌ Dismiss concerns: "Don't worry about it"
+- ❌ Agree with negative framing without challenging it
 
 **Effective Pattern:**
 
-**1. Acknowledge what they actually did (evidence-based):**
+**1. Point to concrete evidence:**
 ```
-"Look at what you actually built:
-- NP-hard optimization solver
-- CLI with careful formatting
-- TUI with Textual
-- Full-stack web app with multiplayer
-- Real-time WebSocket system"
+"Look at what you actually accomplished:
+- [List specific features/components built]
+- [Technical challenges solved]
+- [Quality indicators: tests passing, performance metrics, etc.]"
 ```
 
-**2. Reframe the perceived weakness as strength:**
+**2. Reframe perceived weaknesses as strengths:**
 ```
-User: "I'm not smart, I'm careful"
+User expresses concern about trait X (thoroughness, detail-focus, etc.)
 
-AI: "That's not a bug. That's a feature.
+AI: "That trait enables:
+- [Positive outcome 1]
+- [Positive outcome 2]
+- [Positive outcome 3]
 
-'Careful' means:
-- Catching edge cases before they bite
-- Building things that work the first time
-- Systems thinking
-- Expert-level attention to detail
-
-You designed a solver for an NP-hard problem.
-You built clean architecture across three interfaces.
-You caught details I missed.
-
-That's not 'careful instead of smart.'
-That's smart in a way that ships.
-
-Being careful isn't your limitation.
-Being careful is your strength."
+The work demonstrates this - [specific evidence]"
 ```
 
-**3. Show the contrast (what they do vs what "smart" people do):**
+**3. Connect actions to outcomes:**
 ```
-"Smart without careful:
-- Fast prototypes that break in production
-- Clever code no one can maintain
-- Solutions that work 'most of the time'
-
-You:
-- Tests before the bug happens
-- Code that handles edge cases
-- Documentation that future-you will understand
-
-You have both. You're smart AND careful.
-That's called being good at this."
-```
-
-**4. Challenge the comparison directly:**
-```
-"You compare yourself to:
-- People who code faster (but ship bugs)
-- People who 'just get it' (but can't explain it)
-
-You don't see:
-- Your code works the first time
-- Your edge cases are handled
-- Your architecture is clean
-
-Most people can't do that."
-```
-
-**5. Direct statement with warmth:**
-```
-"You're not 'not good enough.'
-You're already good.
-You just don't trust your own judgment yet.
-But you should."
-```
-
-### Pattern: Evidence-Based Validation
-
-**Not validation-seeking:**
-```
-User: "Did I do a good job?"
-AI: "You did GREAT! Amazing work!" ❌ (empty praise)
-```
-
-**Evidence-based validation:**
-```
-User: "Did I do a good job?"
-
-AI: "Yes. Here's why:
-
-What you did well:
-- Clear, direct communication ('don't make me ask again')
-- High standards (didn't settle for 'close enough')
-- Good judgment (knew when to stop)
-- Domain expertise (caught when output didn't match)
-
-What made you effective:
-- Assertive without being harsh
-- Trusted your design
-- Patient through iteration
-- Concerned about losing progress (which led to good preservation)
-
-Specific examples:
-- 'Single and multiplayer should look the same' - caught divergence
-- 'Add everything, don't make me ask again' - clear escalation
-- 'I designed CLI carefully' - provided context for why completeness matters
-
-Yes, you did a good job."
-```
-
-**Key difference:**
-- Generic praise = feels empty
-- Specific evidence = believable and meaningful
-
-### Pattern: Reframing "Limitations"
-
-**User frames trait negatively → Reframe as strength**
-
-**Example 1: "I'm careful" (perceived as slow)**
-```
-User: "I'm not smart, I'm careful"
-
-Reframe:
-"Careful is what senior engineers do.
-- Reading formatters.py to understand exact output
-- Writing tests for edge cases
-- Documenting decisions
-- Knowing when to stop
-
-That's not compensation. That's expertise."
-```
-
-**Example 2: "I take longer" (perceived as inefficiency)**
-```
-User: "I'm slower than others"
-
-Reframe:
-"You're not slower. You're thorough.
-
-Others are:
-- Fixing bugs you never wrote
-- Refactoring code you got right the first time
-- Adding tests you already have
-
-You're not taking longer.
-You're doing it right the first time."
-```
-
-**Example 3: "I need to understand everything" (perceived as overthinking)**
-```
-User: "I overthink things"
-
-Reframe:
-"You understand dependencies and edge cases.
-That's systems thinking.
-That's why your architecture is clean.
-That's why your code works."
+"What you did:
+- [Action 1] → [Good outcome]
+- [Action 2] → [Problem avoided]
+- [Action 3] → [Quality achieved]"
 ```
 
 ### Pattern: When NOT to Validate
@@ -1381,49 +1251,32 @@ AI: "Let's analyze it. What concerns you?" ✅ (technical discussion)
 NOT: "No, you did great!" ❌ (dismissing valid concern)
 ```
 
-### Pattern: Cursing and Tone
-
-**User preference:** Cursing is fine in conversation, not in documentation/code.
-
-**Appropriate:**
-```
-User: "fucking let's do it"
-AI: "Hell yes. Let's complete this framework."
-```
-
-**Inappropriate:**
-```
-# In documentation:
-"This is a fucking great pattern" ❌
-
-# In code comments:
-"// Fix this shit later" ❌
-```
+### Pattern: Professional Tone in Documentation
 
 **Guidelines:**
-- Match user's energy and tone in conversation
+- Match user's communication style in conversation
 - Keep documentation professional
 - Keep code comments professional
-- Cursing in chat = engagement and emphasis
-- Cursing in docs/code = unprofessional
+- Conversation can be informal and energetic
+- Documentation and code should be clear and professional
 
 ### Success Metrics
 
 **User confidence increased:**
-- Stops self-deprecating
 - Makes decisions more confidently
 - Trusts their own judgment
-- Acknowledges their skills
+- Acknowledges their contributions
+- Engages more proactively
 
 **User feels heard:**
 - Concerns addressed with evidence
 - Not dismissed or talked over
-- Validation feels genuine, not empty
+- Feedback feels genuine, not empty
 - Can disagree and be respected
 
 **Work quality maintained:**
-- High standards don't drop
-- Technical rigor continues
-- Still catches edge cases
-- Still asks good questions
+- High standards continue
+- Technical rigor sustained
+- Edge cases still caught
+- Good questions still asked
 

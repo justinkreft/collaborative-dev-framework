@@ -366,7 +366,7 @@ docs/
 **Extract patterns that apply across projects:**
 
 **From specific:**
-> "In the nexus_roller project, we used SQLite for the MVP and documented when to migrate to PostgreSQL"
+> "In Project A, we used SQLite for the MVP and documented when to migrate to PostgreSQL"
 
 **To general:**
 > "For MVPs, use simpler technology with a documented migration path to production-grade alternatives. Document the migration triggers upfront."
@@ -803,14 +803,14 @@ When user says "match exactly," they mean:
 - [ ] Cross-reference before showing user
 - [ ] Ask: "Is there anything in the reference I haven't captured?"
 
-**File Reference:** `nexus_roller_web/RETRO_CLI_PARITY.md`
+**File Reference:** `project/RETRO_UI_PARITY.md`
 
 ---
 
 ### Lesson: "Match Exactly" Means EVERYTHING (2026-02-21)
 
 **User Quote:**
-> "I designed the CLI and TUI very carefully. ALL functions and information needs to be there. I want 'exploded dice' called out in the UI exactly the way the CLI does."
+> "I designed the CLI and TUI very carefully. ALL functions and information needs to be there. I want the feature indicators called out in the UI exactly the way the CLI does."
 
 **What This Taught Us:**
 
@@ -958,26 +958,26 @@ Add to collaboration patterns:
 - Framework maintenance
 - Example: This pattern itself!
 
-### Example: 2026-02-21 Session
+### Example: UI Parity Session
 
 **What happened:**
-- Worked on nexus_roller_web
+- Worked on Project B
 - Made web UI match CLI exactly
 - Had to iterate 3-4 times
 - User said "don't make me ask again"
-- Realized: should have read formatters.py first
+- Realized: should have read output module first
 
-**Project-specific lesson (nexus_roller_web/LESSONS.md):**
+**Project-specific lesson (project/LESSONS.md):**
 ```markdown
 ## Lesson: Read Reference Implementation First
 
-Should have read formatters.py before implementing web UI.
+Should have read output formatter before implementing web UI.
 Would have captured all fields in first pass.
 ```
 
 **Extract generic pattern:**
 - This applies to ANY project where you're matching existing output
-- Not specific to dice rollers or nexus_roller
+- Not specific to any particular domain
 - Reusable pattern for all future work
 
 **Add to framework (META_LEARNING_FRAMEWORK.md):**
@@ -1004,7 +1004,7 @@ Would have captured all fields in first pass.
 ```bash
 cd collaborative-dev-framework
 git add META_LEARNING_FRAMEWORK.md
-git commit -m "Add 'read reference first' pattern from nexus_roller session"
+git commit -m "Add 'read reference first' pattern from UI parity session"
 ```
 
 ### Extraction Process
@@ -1108,7 +1108,7 @@ git commit -m "Add 'read reference first' pattern from nexus_roller session"
 
 ### Real Example: This Document
 
-**Source:** 2026-02-21 nexus_roller_web session
+**Source:** UI parity session
 
 **Extracted lessons:**
 - Context preservation (COLLABORATION_PATTERNS)
@@ -1118,8 +1118,8 @@ git commit -m "Add 'read reference first' pattern from nexus_roller session"
 - Framework update flow (META_LEARNING) ← This section!
 
 **Process:**
-1. Worked on nexus_roller_web (project)
-2. Created RETRO_CLI_PARITY.md (project retro)
+1. Worked on Project B (project work)
+2. Created RETRO_UI_PARITY.md (project retro)
 3. Identified generic patterns (extraction)
 4. Updated framework docs (application)
 5. Committed to framework repo (preservation)
